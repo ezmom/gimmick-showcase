@@ -1,0 +1,47 @@
+{
+  "A_subtle_veo3fast": {
+    "status": "failed",
+    "error": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"The number value for `durationSeconds` is out of bound. Please provide a value between 4 and 8, inclusive.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n"
+  },
+  "A_subtle_veo31fast": {
+    "status": "failed",
+    "error": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"The number value for `durationSeconds` is out of bound. Please provide a value between 4 and 8, inclusive.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n"
+  },
+  "A_subtle_veo2": {
+    "status": "success",
+    "mp4": "parks/assets/gimmick-samples/veo_abc/A_subtle_veo2.mp4",
+    "gif": "parks/assets/gimmick-samples/veo_abc/A_subtle_veo2.gif",
+    "mp4_size": 875875,
+    "gif_size": 593065
+  },
+  "B_explain_veo3fast": {
+    "status": "failed",
+    "error": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"The number value for `durationSeconds` is out of bound. Please provide a value between 4 and 8, inclusive.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n"
+  },
+  "B_explain_veo31fast": {
+    "status": "failed",
+    "error": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"The number value for `durationSeconds` is out of bound. Please provide a value between 4 and 8, inclusive.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n"
+  },
+  "B_explain_veo2": {
+    "status": "success",
+    "mp4": "parks/assets/gimmick-samples/veo_abc/B_explain_veo2.mp4",
+    "gif": "parks/assets/gimmick-samples/veo_abc/B_explain_veo2.gif",
+    "mp4_size": 1124786,
+    "gif_size": 902344
+  },
+  "C_impact_veo3fast": {
+    "status": "failed",
+    "error": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"The number value for `durationSeconds` is out of bound. Please provide a value between 4 and 8, inclusive.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n"
+  },
+  "C_impact_veo31fast": {
+    "status": "failed",
+    "error": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"The number value for `durationSeconds` is out of bound. Please provide a value between 4 and 8, inclusive.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n"
+  },
+  "C_impact_veo2": {
+    "status": "success",
+    "mp4": "parks/assets/gimmick-samples/veo_abc/C_impact_veo2.mp4",
+    "gif": "parks/assets/gimmick-samples/veo_abc/C_impact_veo2.gif",
+    "mp4_size": 1496649,
+    "gif_size": 1094098
+  }
+}
