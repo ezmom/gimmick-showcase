@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;overflow:hidden}
+.wrap{position:relative;width:570px;height:355px}
+.wrap img{width:100%;height:100%;object-fit:contain;display:block}
+
+/* CSS微アニメーション: B画像の上にオーバーレイ */
+/* 左側(毛穴緩む)に下向き矢印パルス、右側(締まる)に上向き矢印パルス */
+.arrow-left{position:absolute;top:35%;left:22%;width:40px;height:60px;opacity:0;animation:pulseDown 2.5s ease-in-out infinite}
+.arrow-right{position:absolute;top:55%;right:22%;width:40px;height:60px;opacity:0;animation:pulseUp 2.5s ease-in-out 0.8s infinite}
+
+@keyframes pulseDown{
+  0%{opacity:0;transform:translateY(-10px)}
+  30%{opacity:0.8}
+  70%{opacity:0.8;transform:translateY(30px)}
+  100%{opacity:0;transform:translateY(40px)}
+}
+@keyframes pulseUp{
+  0%{opacity:0;transform:translateY(10px)}
+  30%{opacity:0.8}
+  70%{opacity:0.8;transform:translateY(-30px)}
+  100%{opacity:0;transform:translateY(-40px)}
+}
+
+/* 光沢エフェクト */
+.shine{position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);animation:shine 4s ease-in-out 2s infinite;pointer-events:none}
+@keyframes shine{0%{left:-100%}50%{left:120%}100%{left:120%}}
+
+.arrow-svg{filter:drop-shadow(0 1px 3px rgba(0,0,0,0.15))}
+</style></head>
+<body>
+<div class="wrap">
+  <img src="../pattern_b/01_mechanism.png" alt="メカニズム開閉">
+
+  <!-- 左側: 毛穴が開く方向の矢印アニメ -->
+  <div class="arrow-left">
+    <svg class="arrow-svg" viewBox="0 0 40 60" fill="none"><path d="M20 0 L20 45 M8 35 L20 50 L32 35" stroke="#e74c6f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+
+  <!-- 右側: 毛穴が閉じる方向の矢印アニメ -->
+  <div class="arrow-right">
+    <svg class="arrow-svg" viewBox="0 0 40 60" fill="none"><path d="M20 60 L20 15 M8 25 L20 10 L32 25" stroke="#4fc3f7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+
+  <!-- 光沢スイープ -->
+  <div class="shine"></div>
+</div>
+</body></html>

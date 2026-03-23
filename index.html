@@ -1932,3 +1932,93 @@ if (sessionStorage.getItem('gimmick_auth') === '1') {
 </script>
 </body>
 </html>
+<!-- Motion Test Results Section - injected -->
+<script>
+// Add motion test section after auth
+document.addEventListener('DOMContentLoaded', function() {
+  const motionHTML = `
+<div id="motionTest" style="max-width:1400px;margin:20px auto;padding:20px 12px;border-top:3px solid #e74c6f">
+  <h2 style="font-size:18px;text-align:center;margin-bottom:16px">🎬 Bモーション化テスト — 3方式比較</h2>
+  <p style="text-align:center;color:#666;font-size:12px;margin-bottom:20px">
+    B（Gemini直接画像）のリアリティを維持しつつ動かす3つのアプローチ
+  </p>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:30px">
+    <div style="text-align:center;padding:12px;border:1px solid rgba(79,195,247,0.2);border-radius:10px;background:rgba(79,195,247,0.03)">
+      <div style="font-size:13px;font-weight:bold;color:#4fc3f7;margin-bottom:4px">F: B画像+CSS微アニメ</div>
+      <div style="font-size:10px;color:#888">B画像の上にCSS矢印/光沢/パーティクルを薄くオーバーレイ</div>
+      <div style="font-size:10px;color:#4fc3f7;margin-top:4px">コスト: +¥0 / 品質: Bそのまま+動き</div>
+    </div>
+    <div style="text-align:center;padding:12px;border:1px solid rgba(171,71,188,0.2);border-radius:10px;background:rgba(171,71,188,0.03)">
+      <div style="font-size:13px;font-weight:bold;color:#ab47bc;margin-bottom:4px">G: Bプロンプト×マルチフレームGIF</div>
+      <div style="font-size:10px;color:#888">Bの高品質プロンプトで3フレーム連続生成→GIF結合</div>
+      <div style="font-size:10px;color:#ab47bc;margin-top:4px">コスト: ~¥6/本 / 品質: Bレベル×動き</div>
+    </div>
+    <div style="text-align:center;padding:12px;border:1px solid rgba(255,167,38,0.2);border-radius:10px;background:rgba(255,167,38,0.03)">
+      <div style="font-size:13px;font-weight:bold;color:#ffa726;margin-bottom:4px">H: Veo 2.0動画生成</div>
+      <div style="font-size:10px;color:#888">B画像を入力としてVeo 2.0で5秒動画生成→GIF変換</div>
+      <div style="font-size:10px;color:#ffa726;margin-top:4px">コスト: ~¥10/本 / 品質: AI動画</div>
+    </div>
+  </div>
+
+  <!-- 01 Mechanism -->
+  <h3 style="font-size:14px;margin-bottom:10px"><span style="color:#e74c6f">01</span> メカニズム開閉 — 3方式比較</h3>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px">
+    <div style="border:2px solid #66bb6a;border-radius:8px;overflow:hidden">
+      <div style="padding:4px 8px;font-size:10px;background:rgba(102,187,106,0.1);color:#66bb6a;font-weight:bold">B: 元画像（静止画）🏆</div>
+      <div style="background:#fff"><img src="pattern_b/01_mechanism.png" style="width:100%;display:block"></div>
+    </div>
+    <div style="border:1px solid rgba(79,195,247,0.3);border-radius:8px;overflow:hidden">
+      <div style="padding:4px 8px;font-size:10px;background:rgba(79,195,247,0.1);color:#4fc3f7;font-weight:bold">F: B+CSS微アニメ</div>
+      <div style="background:#fff"><iframe src="pattern_f/01_mechanism.html" style="width:100%;height:220px;border:none"></iframe></div>
+    </div>
+    <div style="border:1px solid rgba(171,71,188,0.3);border-radius:8px;overflow:hidden">
+      <div style="padding:4px 8px;font-size:10px;background:rgba(171,71,188,0.1);color:#ab47bc;font-weight:bold">G: マルチフレームGIF</div>
+      <div style="background:#fff"><img src="pattern_g/01_mechanism.gif" style="width:100%;display:block"></div>
+    </div>
+    <div style="border:1px solid rgba(255,167,38,0.3);border-radius:8px;overflow:hidden">
+      <div style="padding:4px 8px;font-size:10px;background:rgba(255,167,38,0.1);color:#ffa726;font-weight:bold">H: Veo 2.0動画→GIF</div>
+      <div style="background:#fff"><img src="pattern_h/01_mechanism.gif" style="width:100%;display:block"></div>
+    </div>
+  </div>
+
+  <!-- 02 Penetration -->
+  <h3 style="font-size:14px;margin-bottom:10px"><span style="color:#e74c6f">02</span> 浸透比較 — F/G比較</h3>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+    <div style="border:2px solid #66bb6a;border-radius:8px;overflow:hidden">
+      <div style="padding:4px 8px;font-size:10px;background:rgba(102,187,106,0.1);color:#66bb6a;font-weight:bold">B: 元画像（静止画）🏆</div>
+      <div style="background:#fff"><img src="pattern_b/02_penetration.png" style="width:100%;display:block"></div>
+    </div>
+    <div style="border:1px solid rgba(79,195,247,0.3);border-radius:8px;overflow:hidden">
+      <div style="padding:4px 8px;font-size:10px;background:rgba(79,195,247,0.1);color:#4fc3f7;font-weight:bold">F: B+CSS微アニメ</div>
+      <div style="background:#fff"><iframe src="pattern_f/02_penetration.html" style="width:100%;height:220px;border:none"></iframe></div>
+    </div>
+    <div style="border:1px solid rgba(171,71,188,0.3);border-radius:8px;overflow:hidden">
+      <div style="padding:4px 8px;font-size:10px;background:rgba(171,71,188,0.1);color:#ab47bc;font-weight:bold">G: マルチフレームGIF</div>
+      <div style="background:#fff"><img src="pattern_g/02_penetration.gif" style="width:100%;display:block"></div>
+    </div>
+  </div>
+
+  <!-- 10 Price Strike -->
+  <h3 style="font-size:14px;margin-bottom:10px"><span style="color:#e74c6f">10</span> 価格打ち消し — F/G比較</h3>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+    <div style="border:2px solid #66bb6a;border-radius:8px;overflow:hidden">
+      <div style="padding:4px 8px;font-size:10px;background:rgba(102,187,106,0.1);color:#66bb6a;font-weight:bold">B: 元画像（静止画）🏆</div>
+      <div style="background:#fff"><img src="pattern_b/10_price_strike.png" style="width:100%;display:block"></div>
+    </div>
+    <div style="border:1px solid rgba(79,195,247,0.3);border-radius:8px;overflow:hidden">
+      <div style="padding:4px 8px;font-size:10px;background:rgba(79,195,247,0.1);color:#4fc3f7;font-weight:bold">F: B+CSS微アニメ</div>
+      <div style="background:#fff"><iframe src="pattern_f/10_price_strike.html" style="width:100%;height:180px;border:none"></iframe></div>
+    </div>
+    <div style="border:1px solid rgba(171,71,188,0.3);border-radius:8px;overflow:hidden">
+      <div style="padding:4px 8px;font-size:10px;background:rgba(171,71,188,0.1);color:#ab47bc;font-weight:bold">G: マルチフレームGIF</div>
+      <div style="background:#fff"><img src="pattern_g/10_price_strike.gif" style="width:100%;display:block"></div>
+    </div>
+  </div>
+
+</div>`;
+  
+  const footer = document.querySelector('.footer');
+  if (footer) footer.insertAdjacentHTML('beforebegin', motionHTML);
+});
+</script>
