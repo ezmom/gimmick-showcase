@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>S5: Canvas 2D Animation</title>
+<style>*{margin:0;padding:0}body{background:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh}canvas{border-radius:8px}</style>
+</head><body>
+<canvas id="c" width="480" height="480"></canvas>
+<script>
+const c = document.getElementById('c');
+const ctx = c.getContext('2d');
+const W = 480, H = 480;
+
+// Animation state
+let t = 0;
+const CYCLE = 240; // frames per cycle (4 seconds at 60fps)
+
+// Colors matching reference
+const SKY = '#d4eaf7';
+const SKY_DEEP = '#a8d4f0';
+const SKIN_1 = '#f5c4a8';
+const SKIN_2 = '#e8a080';
+const SEBUM = '#f0d060';
+const PARTICLE = '#7ec8e3';
+const WHITE = '#ffffff';
+
+// Particles
+const particles = [];
+
+function easeInOutCubic(x) {
+  return x < 0.5 ? 4*x*x*x : 1 - Math.pow(-2*x+2, 3)/2;
+}
+
+function drawPore(squeeze) {
+  // squeeze: 0 = open, 1 = fully squeezed
+  const s = easeInOutCubic(squeeze);
+
+  // Background layers
+  ctx.fillStyle = SKY;
+  ctx.fillRect(0, 0, W, 120);
+
+  ctx.fillStyle = SKY_DEEP;
+  ctx.fillRect(0, 110, W, 15);
+
+  ctx.fillStyle = SKIN_1;
+  ctx.fillRect(0, 120, W, 180);
+
+  ctx.fillStyle = SKIN_2;
+  ctx.fillRect(0, 280, W, 200);
+
+  // Pore canal (white space) — bezier curves that squeeze inward
+  const leftX = 170 - s * 0 + s * 40; // left wall moves right
+  const rightX = 310 + s * 0 - s * 40; // right wall moves left
+  const bottomLeftX = 190 + s * 20;
+  const bottomRightX = 290 - s * 20;
+
+  ctx.fillStyle = WHITE;
+  ctx.beginPath();
+  ctx.moveTo(leftX, 120);
+  ctx.bezierCurveTo(leftX - 10, 180, leftX - 20 + s*30, 280, bottomLeftX, 400);
+  ctx.lineTo(bottomRightX, 400);
+  ctx.bezierCurveTo(rightX + 20 - s*30, 280, rightX + 10, 180, rightX, 120);
+  ctx.closePath();
+  ctx.fill();
+
+  // Pore opening curve (top)
+  const openLeft = 165 + s * 30;
+  const openRight = 315 - s * 30;
+  const openDip = 100 + s * 10;
+
+  ctx.fillStyle = SKY;
+  ctx.beginPath();
+  ctx.moveTo(openLeft, 122);
+  ctx.quadraticCurveTo(240, openDip, openRight, 122);
+  ctx.lineTo(openRight, 120);
+  ctx.lineTo(openLeft, 120);
+  ctx.closePath();
+  ctx.fill();
+
+  // Sebum blob
+  const sebumRx = 28 * (1 - s * 0.65);
+  const sebumRy = 20 * (1 - s * 0.65);
+  const sebumAlpha = 0.9 - s * 0.5;
+
+  ctx.fillStyle = SEBUM;
+  ctx.globalAlpha = sebumAlpha;
+  ctx.beginPath();
+  ctx.ellipse(240, 370, sebumRx, sebumRy, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+}
+
+function drawParticles(phase) {
+  // phase: 0-1 within cycle
+  if (phase < 0.15 || phase > 0.75) return; // only during active phase
+
+  const particlePhase = (phase - 0.15) / 0.6; // normalize to 0-1
+  const numP = 3;
+
+  for (let i = 0; i < numP; i++) {
+    const delay = i * 0.15;
+    const pp = Math.max(0, Math.min(1, (particlePhase - delay) / 0.5));
+    if (pp <= 0 || pp >= 1) continue;
+
+    const y = 105 + pp * 260;
+    const x = 230 + i * 10 + Math.sin(pp * Math.PI * 2) * 5;
+    const alpha = pp < 0.1 ? pp * 10 : pp > 0.8 ? (1 - pp) * 5 : 1;
+    const r = 5 - pp * 2;
+
+    ctx.fillStyle = PARTICLE;
+    ctx.globalAlpha = alpha * 0.85;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Glow
+    ctx.globalAlpha = alpha * 0.3;
+    ctx.beginPath();
+    ctx.arc(x, y, r * 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawSparkle(phase) {
+  if (phase < 0.55 || phase > 0.65) return;
+  const sp = (phase - 0.55) / 0.1;
+  const alpha = sp < 0.5 ? sp * 2 : (1 - sp) * 2;
+  const size = 4 + sp * 10;
+
+  ctx.fillStyle = WHITE;
+  ctx.globalAlpha = alpha;
+  ctx.beginPath();
+  // 4-point star
+  const cx = 240, cy = 112;
+  ctx.moveTo(cx, cy - size);
+  ctx.lineTo(cx + size*0.3, cy - size*0.3);
+  ctx.lineTo(cx + size, cy);
+  ctx.lineTo(cx + size*0.3, cy + size*0.3);
+  ctx.lineTo(cx, cy + size);
+  ctx.lineTo(cx - size*0.3, cy + size*0.3);
+  ctx.lineTo(cx - size, cy);
+  ctx.lineTo(cx - size*0.3, cy - size*0.3);
+  ctx.closePath();
+  ctx.fill();
+  ctx.globalAlpha = 1;
+}
+
+function frame() {
+  t = (t + 1) % CYCLE;
+  const phase = t / CYCLE; // 0-1
+
+  // Squeeze timeline: 0-0.2 open, 0.2-0.5 squeezing, 0.5-0.7 held, 0.7-1.0 releasing
+  let squeeze;
+  if (phase < 0.2) squeeze = 0;
+  else if (phase < 0.5) squeeze = (phase - 0.2) / 0.3;
+  else if (phase < 0.7) squeeze = 1;
+  else squeeze = 1 - (phase - 0.7) / 0.3;
+
+  ctx.clearRect(0, 0, W, H);
+  drawPore(squeeze);
+  drawParticles(phase);
+  drawSparkle(phase);
+
+  requestAnimationFrame(frame);
+}
+
+frame();
+</script>
+</body></html>

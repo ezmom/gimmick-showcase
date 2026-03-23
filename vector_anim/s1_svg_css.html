@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>S1: SVG + CSS Animation</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh}
+svg{width:480px;height:480px}
+
+/* 毛穴の壁が引き締まる */
+.pore-wall-left{animation:squeezeL 4s ease-in-out infinite}
+.pore-wall-right{animation:squeezeR 4s ease-in-out infinite}
+@keyframes squeezeL{
+  0%,20%{d:path("M 180,120 C 180,120 170,200 160,280 C 155,320 160,380 180,400")}
+  50%,70%{d:path("M 180,120 C 180,120 200,200 210,280 C 215,320 210,380 200,400")}
+  100%{d:path("M 180,120 C 180,120 170,200 160,280 C 155,320 160,380 180,400")}
+}
+@keyframes squeezeR{
+  0%,20%{d:path("M 300,120 C 300,120 310,200 320,280 C 325,320 320,380 300,400")}
+  50%,70%{d:path("M 300,120 C 300,120 280,200 270,280 C 265,320 270,380 280,400")}
+  100%{d:path("M 300,120 C 300,120 310,200 320,280 C 325,320 320,380 300,400")}
+}
+
+/* 皮脂が縮む */
+.sebum{animation:shrinkSebum 4s ease-in-out infinite}
+@keyframes shrinkSebum{
+  0%,20%{transform:scale(1);opacity:1}
+  50%,70%{transform:scale(0.4);opacity:0.5}
+  100%{transform:scale(1);opacity:1}
+}
+
+/* 浸透パーティクル */
+.particle{animation:fall 4s ease-in infinite;opacity:0}
+.p1{animation-delay:0.8s}
+.p2{animation-delay:1.2s}
+.p3{animation-delay:1.6s}
+@keyframes fall{
+  0%{cy:100;opacity:0}
+  10%{opacity:0.9}
+  60%{cy:340;opacity:0.6}
+  80%{cy:360;opacity:0}
+  100%{cy:360;opacity:0}
+}
+
+/* 毛穴開口部が狭まる */
+.pore-opening{animation:narrowOpening 4s ease-in-out infinite}
+@keyframes narrowOpening{
+  0%,20%{d:path("M 170,120 Q 200,105 240,105 Q 270,105 300,120")}
+  50%,70%{d:path("M 200,120 Q 225,112 240,112 Q 255,112 280,120")}
+  100%{d:path("M 170,120 Q 200,105 240,105 Q 270,105 300,120")}
+}
+
+/* キラッ */
+.sparkle{animation:sparkle 4s ease-in-out infinite;opacity:0}
+@keyframes sparkle{
+  55%{opacity:0}
+  60%{opacity:1;transform:scale(1.5)}
+  70%{opacity:0;transform:scale(0.5)}
+  100%{opacity:0}
+}
+</style></head>
+<body>
+<svg viewBox="0 0 480 480">
+  <!-- 背景: 空/表皮 -->
+  <rect x="0" y="0" width="480" height="120" fill="#d4eaf7"/>
+  <rect x="0" y="110" width="480" height="20" fill="#a8d4f0"/>
+
+  <!-- 真皮層 -->
+  <rect x="0" y="120" width="480" height="360" fill="#f5c4a8"/>
+
+  <!-- 深層 -->
+  <rect x="0" y="300" width="480" height="180" fill="#e8a080"/>
+
+  <!-- 毛穴の管（白い空間） — 左壁 -->
+  <path class="pore-wall-left" d="M 180,120 C 180,120 170,200 160,280 C 155,320 160,380 180,400" fill="none" stroke="#f5c4a8" stroke-width="0"/>
+
+  <!-- 毛穴の白い空間 -->
+  <path d="M 180,120 C 180,120 170,200 160,280 C 155,320 160,380 180,400 L 300,400 C 320,380 325,320 320,280 C 310,200 300,120 300,120 Z" fill="#fff" opacity="0.95">
+    <animate attributeName="d" dur="4s" repeatCount="indefinite" values="
+      M 180,120 C 180,120 170,200 160,280 C 155,320 160,380 180,400 L 300,400 C 320,380 325,320 320,280 C 310,200 300,120 300,120 Z;
+      M 200,120 C 200,120 200,200 210,280 C 215,320 210,380 200,400 L 280,400 C 270,380 265,320 270,280 C 280,200 280,120 280,120 Z;
+      M 180,120 C 180,120 170,200 160,280 C 155,320 160,380 180,400 L 300,400 C 320,380 325,320 320,280 C 310,200 300,120 300,120 Z"
+      keyTimes="0;0.5;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1"/>
+  </path>
+
+  <!-- 毛穴開口部のカーブ -->
+  <path class="pore-opening" d="M 170,120 Q 200,105 240,105 Q 270,105 300,120" fill="#d4eaf7" stroke="none">
+    <animate attributeName="d" dur="4s" repeatCount="indefinite" values="
+      M 170,120 Q 200,100 240,100 Q 270,100 310,120;
+      M 205,120 Q 225,110 240,110 Q 255,110 275,120;
+      M 170,120 Q 200,100 240,100 Q 270,100 310,120"
+      keyTimes="0;0.5;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1"/>
+  </path>
+
+  <!-- 皮脂 -->
+  <ellipse cx="240" cy="370" rx="30" ry="22" fill="#f0d060" opacity="0.9">
+    <animate attributeName="rx" dur="4s" repeatCount="indefinite" values="30;12;30" keyTimes="0;0.5;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1"/>
+    <animate attributeName="ry" dur="4s" repeatCount="indefinite" values="22;9;22" keyTimes="0;0.5;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1"/>
+    <animate attributeName="opacity" dur="4s" repeatCount="indefinite" values="0.9;0.4;0.9" keyTimes="0;0.5;1"/>
+  </ellipse>
+
+  <!-- 浸透パーティクル -->
+  <circle cx="230" cy="100" r="5" fill="#7ec8e3" opacity="0">
+    <animate attributeName="cy" dur="4s" begin="0.8s" repeatCount="indefinite" values="100;350;350" keyTimes="0;0.6;1"/>
+    <animate attributeName="opacity" dur="4s" begin="0.8s" repeatCount="indefinite" values="0;0.9;0" keyTimes="0;0.1;0.7"/>
+    <animate attributeName="r" dur="4s" begin="0.8s" repeatCount="indefinite" values="5;4;2" keyTimes="0;0.5;1"/>
+  </circle>
+  <circle cx="250" cy="100" r="4" fill="#7ec8e3" opacity="0">
+    <animate attributeName="cy" dur="4s" begin="1.2s" repeatCount="indefinite" values="100;340;340" keyTimes="0;0.6;1"/>
+    <animate attributeName="opacity" dur="4s" begin="1.2s" repeatCount="indefinite" values="0;0.8;0" keyTimes="0;0.1;0.7"/>
+  </circle>
+  <circle cx="240" cy="100" r="4.5" fill="#7ec8e3" opacity="0">
+    <animate attributeName="cy" dur="4s" begin="1.6s" repeatCount="indefinite" values="100;355;355" keyTimes="0;0.6;1"/>
+    <animate attributeName="opacity" dur="4s" begin="1.6s" repeatCount="indefinite" values="0;0.85;0" keyTimes="0;0.1;0.7"/>
+  </circle>
+
+  <!-- 引き締め完了のキラッ -->
+  <circle cx="240" cy="110" r="8" fill="#fff" opacity="0">
+    <animate attributeName="opacity" dur="4s" repeatCount="indefinite" values="0;0;0;1;0;0" keyTimes="0;0.5;0.54;0.58;0.65;1"/>
+    <animate attributeName="r" dur="4s" repeatCount="indefinite" values="3;3;3;12;6;3" keyTimes="0;0.5;0.54;0.58;0.65;1"/>
+  </circle>
+</svg>
+</body></html>
