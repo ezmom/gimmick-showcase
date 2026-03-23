@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ギミック素材 20種×5方式 プロンプト付き完全比較</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#0a0a14;color:#e0e0e0;line-height:1.6}
+a{color:#4fc3f7;text-decoration:none}
+
+.auth-gate{position:fixed;inset:0;background:#0a0a14;z-index:9999;display:flex;align-items:center;justify-content:center}
+.auth-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:40px;text-align:center;max-width:360px}
+.auth-box h2{margin-bottom:16px;font-size:18px}
+.auth-box input{width:100%;padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#fff;font-size:14px;margin-bottom:12px;outline:none}
+.auth-box input:focus{border-color:#e74c6f}
+.auth-box button{padding:10px 24px;border-radius:8px;border:none;background:#e74c6f;color:#fff;font-size:14px;cursor:pointer;font-weight:bold}
+.auth-box button:hover{background:#d63a5e}
+.auth-box .error{color:#ef4444;font-size:12px;margin-top:8px;display:none}
+
+.main-content{display:none}
+
+.header{text-align:center;padding:24px 20px 12px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.header h1{font-size:20px;letter-spacing:1px}
+.header p{color:#555;font-size:11px;margin-top:4px}
+.header .verdict{margin-top:8px;padding:8px 20px;display:inline-block;border-radius:20px;background:rgba(102,187,106,0.12);border:1px solid rgba(102,187,106,0.3);color:#66bb6a;font-size:13px}
+
+.nav-bar{display:flex;flex-wrap:wrap;gap:4px;padding:10px 16px;justify-content:center;max-width:1400px;margin:0 auto;position:sticky;top:0;background:#0a0a14;z-index:100;border-bottom:1px solid rgba(255,255,255,0.04)}
+.nav-tab{font-size:10px;padding:4px 8px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);color:#666;transition:.2s;white-space:nowrap}
+.nav-tab:hover{border-color:#e74c6f;color:#e74c6f}
+
+.gimmick-section{max-width:1400px;margin:0 auto;padding:20px 12px;border-bottom:1px solid rgba(255,255,255,0.04)}
+.gimmick-section h2{font-size:16px;margin-bottom:12px;padding-left:8px}
+.gid{color:#e74c6f;font-weight:bold}
+.gtag{font-size:11px;color:#555;margin-left:6px;padding:2px 8px;border:1px solid rgba(255,255,255,0.06);border-radius:6px}
+
+.methods-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:10px}
+
+.method-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;overflow:hidden}
+.method-card.best{border:2px solid #66bb6a;box-shadow:0 0 12px rgba(102,187,106,0.15)}
+.method-header{padding:6px 10px;font-size:11px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid;background:rgba(255,255,255,0.02)}
+.method-label{font-weight:bold}
+.method-meta{font-size:9px;color:#666}
+
+.asset-area{background:#fff;min-height:200px;display:flex;align-items:center;justify-content:center;overflow:auto}
+.asset-area img{width:100%;height:auto;display:block}
+.asset-area iframe{width:100%;height:300px;border:none}
+.placeholder{color:#999;font-size:12px;padding:30px;text-align:center}
+
+.prompt-details{border-top:1px solid rgba(255,255,255,0.04)}
+.prompt-details summary{padding:8px 12px;font-size:11px;cursor:pointer;color:#888;user-select:none}
+.prompt-details summary:hover{color:#e74c6f}
+.prompt-content{padding:8px 12px;max-height:400px;overflow-y:auto}
+
+.prompt-step{margin-bottom:10px;border:1px solid rgba(255,255,255,0.06);border-radius:6px;overflow:hidden}
+.step-header{padding:5px 10px;font-size:11px;background:rgba(255,255,255,0.03);color:#aaa}
+.step-action{padding:3px 10px;font-size:10px;color:#666}
+.model-badge{font-size:9px;padding:1px 6px;border-radius:4px;background:rgba(79,195,247,0.15);color:#4fc3f7;margin-left:4px}
+.prompt-text{padding:8px 10px;font-size:10px;line-height:1.5;color:#ccc;white-space:pre-wrap;word-break:break-all;background:rgba(0,0,0,0.3);border-radius:0 0 6px 6px;max-height:200px;overflow-y:auto;font-family:'SF Mono','Menlo',monospace}
+.no-prompt{color:#555;font-size:11px;padding:10px}
+.note{color:#f0ad4e;font-size:10px;padding:6px 10px;margin-top:4px}
+
+.footer{text-align:center;padding:30px;color:#333;font-size:10px}
+
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<div class="auth-gate" id="authGate">
+  <div class="auth-box">
+    <h2>🔒 パスワードを入力</h2>
+    <p style="color:#666;font-size:12px;margin-bottom:16px">AIパク ギミック比較ビュー</p>
+    <input type="password" id="authPass" placeholder="パスワード" onkeydown="if(event.key==='Enter')checkAuth()">
+    <br>
+    <button onclick="checkAuth()">ログイン</button>
+    <div class="error" id="authError">パスワードが違います</div>
+  </div>
+</div>
+
+<div class="main-content" id="mainContent">
+
+<div class="header">
+  <h1>🔬 ギミック素材 20種×5方式 プロンプト付き完全比較</h1>
+  <p>各方式の全プロンプト（Opus→Gemini→画像生成の全工程）を公開 / 20種のギミック × A/B/C/D/E 5方式</p>
+  <div class="verdict">🏆 パク判断: <b>Bパターン（Gemini直接画像生成）</b>がベスト — リアリティ最優先</div>
+</div>
+
+<div class="nav-bar"><a href="#g01" class="nav-tab">01 メカニズム開閉</a><a href="#g02" class="nav-tab">02 浸透比較</a><a href="#g03" class="nav-tab">03 ビフォーアフター</a><a href="#g04" class="nav-tab">04 定期縛りなし</a><a href="#g05" class="nav-tab">05 返金保証バッジ</a><a href="#g06" class="nav-tab">06 カウントダウンタイマー</a><a href="#g07" class="nav-tab">07 累計販売数</a><a href="#g08" class="nav-tab">08 満足度円グラフ</a><a href="#g09" class="nav-tab">09 ランキングバッジ</a><a href="#g10" class="nav-tab">10 価格打ち消し</a><a href="#g11" class="nav-tab">11 チェックリスト</a><a href="#g12" class="nav-tab">12 使い方3ステップ</a><a href="#g13" class="nav-tab">13 成分ハイライト</a><a href="#g14" class="nav-tab">14 口コミカルーセル</a><a href="#g15" class="nav-tab">15 比較表</a><a href="#g16" class="nav-tab">16 SNS反響</a><a href="#g17" class="nav-tab">17 医師推薦</a><a href="#g18" class="nav-tab">18 数字フリップ</a><a href="#g19" class="nav-tab">19 限定個数</a><a href="#g20" class="nav-tab">20 送料無料+特典</a></div>
+
+<section class="gimmick-section" id="g01">
+  <h2><span class="gid">01</span> メカニズム開閉 <span class="gtag">原因説明</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_a/01_mechanism.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Direct HTML/CSS/SVG generation</div>
+  <pre class="prompt-text">CSS/SVGによる毛穴筋の開閉メカニズム断面図。セマンティック検索参照: on:myskin img_017。570x355px。左側「毛穴筋が緩む」（毛穴開）と右側「毛穴筋が締まる」（毛穴閉）をピンク/ベージュの肌断層で表現。CSSキーフレームアニメーションで開閉動作を表現。</pre>
+</div><div class="note">💡 01のみ実装。他の19種はA未作成。</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/01_mechanism.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a clean infographic illustration for a Japanese skincare article LP.
+Show a cross-section of skin with pores. Left side: &quot;毛穴筋が緩む&quot; (pore muscle relaxed, pore is open/enlarged). 
+Right side: &quot;毛穴筋が締まる&quot; (pore muscle tight, pore is closed/small).
+Use soft pink for skin layers, red for muscle fibers.
+Add blue arrows showing the opening/closing direction.
+Style: Clean medical illustration, white background, Japanese text labels.
+Size: 570x355 pixels aspect ratio.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/01_mechanism.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction prompt</div>
+  <pre class="prompt-text">あなたはEC記事LP（ランディングページ）のクリエイティブディレクターです。
+以下のギミック素材を、Gemini画像生成AIに作らせるための最適なプロンプトを書いてください。
+
+■ ギミックの目的: 毛穴の筋肉が緩む/締まるメカニズムを示す断面図ギミック
+
+■ 参考にすべき勝ちパターン:
+- スキンケア系EC記事LPで推定広告費1億円超のLPから抽出
+- 角質層の断面図は暖色系（ピンク〜ベージュ）で描く
+- テキストは日本語で入れる
+- イラスト/インフォグラフィック風が主流（写真ではない）
+- 背景は白 or 淡い色
+- 570x355px程度の横長
+
+■ 出力: 画像生成AIへの英語プロンプト1つだけ。説明や前置き不要。プロンプトのみ出力。</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation with director-refined prompt</div>
+  <pre class="prompt-text">(Gemini 3.1 Proが動的に生成したプロンプト - セッション実行時に決定)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/01_mechanism.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (4ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/4</div>
+  <pre class="prompt-text">Skin cross-section infographic showing pore muscle RELAXED and pore WIDE OPEN. Red muscle fibers are loose. Blue arrows pointing OUTWARD. Japanese label '毛穴筋が緩む'. Pink/beige skin layers, white background. Clean medical illustration. 570x355.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/4</div>
+  <pre class="prompt-text">Skin cross-section infographic showing pore muscle PARTIALLY CONTRACTED, pore HALF CLOSED. Red muscle fibers tightening. Blue arrows pointing slightly inward. Japanese label '締まり始める'. Same style.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/4</div>
+  <pre class="prompt-text">Skin cross-section infographic showing pore muscle FULLY CONTRACTED, pore TIGHTLY CLOSED. Red muscle fibers tight. Blue arrows pointing INWARD. Japanese label '毛穴筋が締まる'. Pore is nearly invisible. Same style.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 4: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 4/4</div>
+  <pre class="prompt-text">Skin cross-section infographic showing pore muscle PARTIALLY RELAXED again, pore HALF OPEN. Transition state. Japanese label '再び緩む'. Same style.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/01_mechanism.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid HTML: B pattern image + SVG animation overlay</div>
+  <pre class="prompt-text">pattern_b/01_mechanism.pngをベース画像として使用。SVGオーバーレイで浸透粒子のアニメーション（左側は弱い浸透、右側は強い浸透をcircle要素のanimate属性で表現）を追加。pointer-events:noneで画像のインタラクションを阻害しない。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g02">
+  <h2><span class="gid">02</span> 浸透比較 <span class="gtag">差別化</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/02_penetration.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a comparison infographic for a Japanese skincare LP showing ingredient penetration.
+Left panel labeled &quot;通常の化粧品&quot; (regular cosmetics) in gray - arrow only reaches the surface layer.
+Right panel labeled &quot;美容液X&quot; (serum X) in pink/red - arrow penetrates deep into skin layers.
+Show 4-5 horizontal skin layers (角質層, 顆粒層, 有棘層, 基底層) with different warm tones.
+Style: Clean, flat design with Japanese labels. White background.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/02_penetration.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE: Same director prompt as 01] ■ ギミックの目的: 通常の化粧品 vs 自社美容液の角質層への浸透力比較ギミック</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamically generated by 3.1 Pro)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/02_penetration.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (4ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/4</div>
+  <pre class="prompt-text">Skincare penetration comparison infographic. Left '通常の化粧品' (gray header), Right '美容液X' (pink header). Both show 5 skin layers (角質層-基底層). Serum droplets at TOP of both sides, not yet penetrating. White background. 570x355.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/4</div>
+  <pre class="prompt-text">Same comparison. Left: droplets stuck at surface layer (can't penetrate). Right: droplets have reached 2nd layer, glowing effect. Arrows showing downward movement on right side only.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/4</div>
+  <pre class="prompt-text">Same comparison. Left: droplets still at surface, fading. Right: droplets deep in 4th layer with strong pink glow, showing deep penetration. '※角質層まで' annotation.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 4: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 4/4</div>
+  <pre class="prompt-text">Same comparison. Left: surface droplets gone (didn't penetrate, gray X mark). Right: all layers glowing pink showing complete penetration. Text '浸透力の差' highlighted.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/02_penetration.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG penetration animation</div>
+  <pre class="prompt-text">pattern_b/02_penetration.pngベース。左側に弱い浸透粒子（グレー、浅い往復）、右側に強い浸透粒子（ピンク、深い下降アニメーション）をSVG circle+animate要素で追加。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g03">
+  <h2><span class="gid">03</span> ビフォーアフター <span class="gtag">実感</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/03_before_after.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a split comparison image for a Japanese skincare LP.
+Left side labeled &quot;Before&quot; - skin texture with visible pores, rough texture, dull appearance.
+Right side labeled &quot;After&quot; - smooth, glowing, poreless skin appearance.
+Separated by a clean white divider line in the middle.
+Style: Realistic skin texture close-up. Warm tones. 570x355 aspect ratio.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/03_before_after.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE: Same director prompt] ■ ギミックの目的: 使用前/使用後の肌テクスチャ比較ギミック</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamically generated by 3.1 Pro)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/03_before_after.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Split skin comparison image. Left side shows rough, dull skin with visible pores and texture labeled 'Before'. Clean divider in middle. Right side is blurred/hidden. Japanese EC LP style. 570x355.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Split skin comparison. Left: rough skin 'Before'. Right: smooth glowing skin partially revealed 'After'. Divider at 60% position. Japanese EC LP style. 570x355.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">Split skin comparison. Left: rough skin 'Before' (smaller portion). Right: beautiful smooth radiant skin 'After' taking 70% of image. Japanese EC LP. 570x355.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/03_before_after.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + CSS slider interaction</div>
+  <pre class="prompt-text">pattern_b/03_before_after.pngベース。cursor:ew-resizeでスライダー操作可能なビフォーアフター。白いスライダーライン(box-shadow付き)をCSS position:absoluteで配置。マウスドラッグでclip-pathまたはleft位置が変化する仕組み。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g04">
+  <h2><span class="gid">04</span> 定期縛りなし <span class="gtag">購入ハードル除去</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/04_no_subscription.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create an infographic for a Japanese EC LP showing &quot;購入回数のお約束なし！&quot; (No purchase commitment).
+Show 3 product boxes in a row labeled 1回目, 2回目, 3回目.
+Box 1 has a green checkmark. Boxes 2 and 3 have red X marks overlaid.
+Style: Bright, friendly, pink/yellow color scheme. Japanese text.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/04_no_subscription.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE: Same director prompt] ■ ギミックの目的: 定期購入の縛りなしを示すギミック（1回目OK、2-3回目不要）</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamically generated by 3.1 Pro)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/04_no_subscription.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Japanese EC LP infographic. Three product boxes in a row labeled '1回目' '2回目' '3回目'. All boxes visible, no marks yet. Title '購入回数のお約束なし！'. Pink color scheme. 570x280.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Same layout. Box 1 has green checkmark. Box 2 has large red X mark overlaid. Box 3 still unmarked. 570x280.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">Same layout. Box 1 green check. Boxes 2 and 3 both have large red X marks. Text below: 'いつでも解約OK'. 570x280.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/04_no_subscription.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG checkmark/X animation</div>
+  <pre class="prompt-text">pattern_b/04_no_subscription.pngベース。SVGでチェックマーク（green #22c55e、1回目位置）とXマーク（red #ef4444、2-3回目位置）を順次表示するアニメーション。circle+animate attributeName='opacity'で時間差表示。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g05">
+  <h2><span class="gid">05</span> 返金保証バッジ <span class="gtag">安心訴求</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/05_guarantee.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a trust badge for a Japanese skincare LP.
+A golden/orange circular badge with shield icon, text &quot;全額返金保証付き&quot; (Full money-back guarantee).
+Add sparkle effects around the badge.
+Below: &quot;初回限定&quot; (First purchase only).
+Style: Premium, trustworthy. Gold gradient. Clean design.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/05_guarantee.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE: Same director prompt] ■ ギミックの目的: 全額返金保証バッジ（信頼性・安心感の訴求）</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamically generated by 3.1 Pro)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/05_guarantee.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Money-back guarantee badge for Japanese EC LP. A golden circular badge at 50% opacity, partially formed. Shield icon faint. Text '全額返金保証付き' barely visible. White background. Building up effect. 300x300.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Same badge now at 80% opacity, nearly complete. Gold gradient visible. Shield icon clear. Text readable. Small sparkles starting to appear around edges.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">Badge fully formed, 100% opacity. Rich gold gradient with '全額返金保証付き' in bold white. '初回限定' below. 6 sparkle stars bursting around the badge. Maximum impact.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/05_guarantee.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG sparkle/ring animation</div>
+  <pre class="prompt-text">pattern_b/05_guarantee.pngベース。SVGでスパークル星（animation:sp2 キーフレーム、scale 0→6→0）とリングパルス（circle r 80→120→80のopacity変化）をオーバーレイ。金色グロー効果。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g06">
+  <h2><span class="gid">06</span> カウントダウンタイマー <span class="gtag">緊急性</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/06_countdown.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a countdown timer banner for a Japanese EC LP. Shows &quot;本日限定キャンペーン&quot; (Today only campaign) with a digital timer showing 02:34:56 in red/orange digits. Urgent feel with &quot;終了まであと&quot; (Ending in) text. Clean white background, Japanese text. 570x200 aspect ratio.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/06_countdown.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE_v2] ■ ギミック: 本日限定キャンペーンのカウントダウンタイマー表示
+■ スタイル: インフォグラフィック、白背景、日本語テキスト、570x280px横長</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamically generated by 3.1 Pro)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/06_countdown.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Digital countdown timer for Japanese EC LP. Shows '本日限定キャンペーン' with timer displaying '02:59:59'. Red/orange digits on dark background. Urgent feel. 570x200.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Same timer showing '01:23:45'. More urgent. Timer digits slightly glowing. 570x200.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">Same timer showing '00:05:32'. VERY urgent. Red pulsing glow around timer. '終了間近！' text flashing. 570x200.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/06_countdown.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG animated counter overlay</div>
+  <pre class="prompt-text">pattern_b/06_countdown.pngベース。SVG rect(rgba黒背景、opacity pulse)+text要素で02:34:56をmonospaceフォントで表示。fill色を#ff4444⇔#ff8800で1秒サイクルアニメーション。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g07">
+  <h2><span class="gid">07</span> 累計販売数 <span class="gtag">権威性</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/07_sales_count.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a sales milestone counter for a Japanese skincare LP. Shows &quot;シリーズ累計 1,000万個 突破！&quot; (Series total 10 million units sold!) with a rising bar chart or counter animation feel. Gold/yellow celebration style with confetti. Japanese text. 570x280.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/07_sales_count.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE_v2] ■ ギミック: 累計販売数100万個突破の実績表示（棒グラフ+数字）</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamic)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/07_sales_count.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Sales milestone display for Japanese skincare LP. Bar chart rising. Counter showing '500万個'. Gold accents. 'シリーズ累計' header. 570x280.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Same display. Bar chart higher. Counter showing '800万個'. More confetti. 570x280.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">Same display. Bar chart at peak. Counter showing '1,000万個突破！' with golden burst effect and confetti celebration. 570x280.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/07_sales_count.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG confetti animation</div>
+  <pre class="prompt-text">pattern_b/07_sales_count.pngベース。8個のSVG rect要素（金/ピンク/青/緑/紫/オレンジ）をconfettiキーフレームアニメーション（translateY -20→360px + rotate 0→720deg）で3秒サイクル降下。時間差(0s〜1s)で自然な紙吹雪効果。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g08">
+  <h2><span class="gid">08</span> 満足度円グラフ <span class="gtag">エビデンス</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/08_satisfaction_pie.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a satisfaction rate pie chart for Japanese EC LP. Circular chart showing 93.2% in large text, the pie is almost full in pink/coral color. Label: &quot;お客様満足度&quot; (Customer satisfaction). Small text: &quot;※2024年自社調べ n=1,247&quot;. Clean, professional. 570x320.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/08_satisfaction_pie.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE_v2] ■ ギミック: 顧客満足度93.2%の円グラフ（ほぼ全面がピンク）</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamic)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/08_satisfaction_pie.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Satisfaction pie chart for Japanese EC LP. Circle 30% filled in pink. Number showing '30%'. Label 'お客様満足度'. Clean white background. 570x320.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Same pie chart 70% filled. Number '70%'. Growing animation feel. 570x320.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">Pie chart 93.2% filled in coral/pink. Large '93.2%' text. 'お客様満足度' with small note '※自社調べ n=1,247'. Celebration sparkles. 570x320.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/08_satisfaction_pie.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG pulse ring + sparkle animation</div>
+  <pre class="prompt-text">pattern_b/08_satisfaction_pie.pngベース。中心(285,175)からcircle r=80→100→80のopacityパルスリング(3秒サイクル)。4隅にsp3キーフレーム(r:0→5→0)のスパークル点(#e74c6f)を時間差配置。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g09">
+  <h2><span class="gid">09</span> ランキングバッジ <span class="gtag">権威性</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/09_ranking_badge.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a ranking badge for Japanese EC LP. Shows &quot;楽天ランキング 第1位&quot; (Rakuten Ranking #1) with a gold crown, laurel wreath, and sparkles. Premium gold gradient. Also show &quot;@cosme ベストコスメ&quot; badge next to it. 570x280.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/09_ranking_badge.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE_v2] ■ ギミック: 楽天ランキング1位・@cosmeベストコスメ受賞バッジ</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamic)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/09_ranking_badge.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Faint outline of a laurel wreath crown badge. Partially formed. Japanese EC LP style. Gold/premium feel beginning to appear. 570x280.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Badge 70% formed. Gold crown visible. Text '楽天ランキング' appearing. Laurel wreath clear. 570x280.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">Fully formed premium badge. Gold crown, laurel wreath. '楽天ランキング 第1位' in bold. '@cosme ベストコスメ' badge next to it. Sparkles. Maximum prestige. 570x280.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/09_ranking_badge.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG shine sweep + gold sparkles</div>
+  <pre class="prompt-text">pattern_b/09_ranking_badge.pngベース。linearGradient(white→transparent)のrect要素をx:-100→670のshineアニメーション(3秒linear)で光沢スイープ。4隅に金色スパークル(sp4 scale 0→1→0、1.5秒サイクル)。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g10">
+  <h2><span class="gid">10</span> 価格打ち消し <span class="gtag">オファー</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/10_price_strike.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a price comparison visual for Japanese EC LP. Shows original price &quot;通常価格 ¥12,800&quot; with red strikethrough line, then arrow pointing to special price &quot;特別価格 ¥3,980&quot; in large red text with &quot;69% OFF&quot; burst badge. Yellow/red color scheme. 570x280.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/10_price_strike.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE_v2] ■ ギミック: 通常価格¥12,800→特別価格¥3,980の打ち消し線+OFFバッジ</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamic)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/10_price_strike.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Price display for Japanese EC LP. Shows '通常価格 ¥12,800' in normal text. Clean layout. No discount shown yet. 570x280.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Same price. Red strikethrough line being drawn across '¥12,800'. Arrow pointing down to new price area. 570x280.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">Full price comparison. '通常価格 ¥12,800' with red strikethrough. Large red '特別価格 ¥3,980' below. '69% OFF' burst badge. Exciting sale feel. 570x280.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/10_price_strike.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG strikethrough + price reveal animation</div>
+  <pre class="prompt-text">pattern_b/10_price_strike.pngベース。SVG line要素でx2を160→410にアニメーション(2秒)で打ち消し線描画。text要素で¥3,980をopacity 0→1 + font-size 20→40でポップイン。赤(#e53935)。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g11">
+  <h2><span class="gid">11</span> チェックリスト <span class="gtag">問題提起</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/11_checklist.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a symptom checklist for Japanese skincare LP. Title: &quot;こんなお悩みありませんか？&quot; Shows 5 items with checkboxes: 毛穴の開き, シミが増えた, ハリがない, くすみが気になる, 乾燥がひどい. Each with a pink/coral checkmark. Clean design. 570x320.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/11_checklist.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE_v2] ■ ギミック: こんなお悩みありませんか？5項目チェックリスト</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamic)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/11_checklist.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Checklist for Japanese skincare LP. Title 'こんなお悩みありませんか？'. 5 items listed but no checkmarks yet: 毛穴の開き, シミが増えた, ハリがない, くすみが気になる, 乾燥がひどい. 570x320.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Same checklist. First 3 items now have pink checkmarks. Last 2 still unchecked. 570x320.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">All 5 items checked with pink/coral checkmarks. Highlighted appearance. 'あなたも当てはまりませんか？' text at bottom. 570x320.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/11_checklist.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG sequential checkmark animation</div>
+  <pre class="prompt-text">pattern_b/11_checklist.pngベース。5つのSVG text要素「✓」をy=135,175,215,255,295に配置。opacity 0→1を5秒サイクルで順次表示（各アイテム1秒遅延）。#e74c6f色。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g12">
+  <h2><span class="gid">12</span> 使い方3ステップ <span class="gtag">使用方法</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/12_three_steps.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a 3-step usage guide for Japanese skincare LP. Three circles connected by arrows: Step1 &quot;洗顔後に塗る&quot; with hand icon, Step2 &quot;やさしく馴染ませる&quot; with massage icon, Step3 &quot;朝晩2回&quot; with clock icon. Pink/white color scheme. Japanese text. 570x250.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/12_three_steps.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE_v2] ■ ギミック: 使い方3ステップの図解（洗顔→塗布→定着）</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamic)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/12_three_steps.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Step guide for Japanese skincare LP. Step 1 circle highlighted: '洗顔後に塗る' with hand icon. Steps 2 and 3 grayed out. Connected by arrows. 570x250.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Steps 1-2 highlighted. Step 2: 'やさしく馴染ませる' with massage icon. Step 3 still gray. 570x250.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">All 3 steps highlighted. Step 3: '朝晩2回' with clock icon. Complete guide. Pink/white color scheme. 'たった3ステップ！' header. 570x250.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/12_three_steps.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG sequential circle highlight</div>
+  <pre class="prompt-text">pattern_b/12_three_steps.pngベース。3つのSVG circle(cx=120,285,450 cy=180 r=45)を#e74c6f stroke-width:3で順次ハイライト。opacity 0→0.8→0.2→0の4秒サイクルで各ステップが順番に光る。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g13">
+  <h2><span class="gid">13</span> 成分ハイライト <span class="gtag">メカニズム</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/13_ingredients.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create an ingredients highlight visual for Japanese skincare LP. Shows a serum bottle in center with ingredient callouts radiating out: ナイアシンアミド, ビタミンC誘導体, ヒアルロン酸, コラーゲン, セラミド. Each in a rounded badge. Clean medical style. 570x350.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/13_ingredients.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE_v2] ■ ギミック: 有効成分5種のハイライト表示（ボトルから放射状に）</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamic)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/13_ingredients.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Serum bottle in center of image, simple. One ingredient badge 'ナイアシンアミド' callout visible. Japanese skincare LP infographic. Clean medical style. 570x350.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Same bottle. 3 ingredient badges visible radiating out: ナイアシンアミド, ビタミンC誘導体, ヒアルロン酸. Connection lines to bottle. 570x350.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">All 5 ingredients shown: ナイアシンアミド, ビタミンC誘導体, ヒアルロン酸, コラーゲン, セラミド. Full radial layout around bottle. Glowing highlights. 570x350.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/13_ingredients.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG pulse ring + ingredient dot animation</div>
+  <pre class="prompt-text">pattern_b/13_ingredients.pngベース。中心(285,175)からpulse ring(r:50→80→50 opacity変化3秒)。5成分位置に色分けcircle（水色/緑/オレンジ/紫/ピンク）をpulseキーフレーム(r:3→8→3)で時間差点滅。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g14">
+  <h2><span class="gid">14</span> 口コミカルーセル <span class="gtag">体験談</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/14_reviews_carousel.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a reviews section for Japanese EC LP showing 3 customer review cards side by side. Each card has: 5 stars, age/gender (40代女性, 50代女性, 30代女性), short quote in Japanese, small avatar circle. Soft pastel background. 570x280.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/14_reviews_carousel.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE_v2] ■ ギミック: 3人の口コミカード並列表示（星5+年代+感想）</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamic)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/14_reviews_carousel.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">One review card for Japanese EC LP. 5 stars, '40代女性', short positive review quote. Small avatar. Soft pastel card on white background. 570x280.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Two review cards side by side. Different ages '40代' and '50代'. Different quotes. Both 5 stars. 570x280.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">Three review cards. Ages '40代女性', '50代女性', '30代女性'. All 5 stars. Positive quotes. Complete social proof section. 570x280.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/14_reviews_carousel.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG star twinkle animation</div>
+  <pre class="prompt-text">pattern_b/14_reviews_carousel.pngベース。3カ所(x=80,230,380 y=115)に★★★★★をstarTwinkleキーフレーム(opacity 0.3→1、fill #ffd700→#ffeb3b)1.5秒サイクルで時間差点滅。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g15">
+  <h2><span class="gid">15</span> 比較表 <span class="gtag">差別化</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/15_comparison_table.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a comparison table for Japanese EC LP. Headers: 項目 / 他社A / 他社B / 当社(highlighted). Rows: 有効成分 ○/○/◎, 返金保証 ×/△/○, 定期縛り あり/あり/なし, 価格 ¥8,800/¥6,980/¥3,980(red). Our column highlighted in pink. 570x320.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/15_comparison_table.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE_v2] ■ ギミック: 自社vs他社2社の比較表（◎○×形式）</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamic)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/15_comparison_table.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Comparison table for Japanese EC LP. Headers visible: 項目/他社A/他社B/当社. Only header row, cells empty. Our column has pink highlight. 570x320.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Table with 2 rows filled. 有効成分 ○/○/◎, 返金保証 ×/△/○. Our column clearly winning. 570x320.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">Full table. 4 rows: 有効成分 ○/○/◎, 返金保証 ×/△/○, 定期縛り あり/あり/なし, 価格 ¥8,800/¥6,980/¥3,980. Our column highlighted pink, clearly best. 570x320.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/15_comparison_table.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG column highlight pulse</div>
+  <pre class="prompt-text">pattern_b/15_comparison_table.pngベース。当社列(x=380 w=160 h=280)にrect要素(rgba(231,76,111,0.08))をopacity 0.05→0.15→0.05の2秒パルスアニメーション。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g16">
+  <h2><span class="gid">16</span> SNS反響 <span class="gtag">社会的証明</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/16_sns_reactions.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create SNS reaction posts mockup for Japanese skincare LP. Show 3 Twitter/X-style post cards with profile pics, usernames, and short Japanese reviews about a skincare product. Include like/retweet counts. Clean, realistic social media style. 570x350.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/16_sns_reactions.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE_v2] ■ ギミック: SNS風投稿3件の反響モックアップ</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamic)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/16_sns_reactions.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">One Twitter/X-style post card about skincare product. Profile pic, username, short Japanese review. Like count visible. Clean mockup. 570x350.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Two social media post cards. Different profiles. Both positive reviews about skincare. Like/retweet counts. 570x350.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">Three social media post cards showing enthusiastic reviews. High engagement numbers. 'SNSで話題沸騰！' header. 570x350.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/16_sns_reactions.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG heart beat animation</div>
+  <pre class="prompt-text">pattern_b/16_sns_reactions.pngベース。3カ所(x=160,330,490 y=310)にハートマーク♥(#e74c6f)をheartBeatキーフレーム(scale 1→1.3→1)で1秒サイクル時間差アニメーション。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g17">
+  <h2><span class="gid">17</span> 医師推薦 <span class="gtag">権威性</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/17_doctor_recommend.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a doctor recommendation section for Japanese EC LP. Shows a female doctor in white coat (illustration style) with a speech bubble: &quot;皮膚科医も注目の成分です&quot;. Name plate: &quot;○○皮膚科 院長 ○○先生&quot;. Professional, trustworthy design. 570x280.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/17_doctor_recommend.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE_v2] ■ ギミック: 皮膚科医推薦コメント（白衣イラスト+吹き出し）</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamic)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/17_doctor_recommend.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Simple silhouette of a doctor in white coat. No text yet. Professional medical feel. White/blue background. 570x280.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Female doctor illustration (clean style) in white coat. Speech bubble forming. Name plate starting to appear. 570x280.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">Complete doctor recommendation. Female doctor illustration with speech bubble: '皮膚科医も注目の成分です'. Name plate: '○○皮膚科 院長'. Professional trustworthy design. 570x280.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/17_doctor_recommend.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG speech bubble fade-in</div>
+  <pre class="prompt-text">pattern_b/17_doctor_recommend.pngベース。吹き出し位置(250,80 w=280 h=80)にrect(rgba(79,195,247,0.08))をopacity 0→1→1→0の4秒フェードインアニメーション。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g18">
+  <h2><span class="gid">18</span> 数字フリップ <span class="gtag">エビデンス</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/18_number_flip.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a statistics display for Japanese EC LP with 3 big numbers: &quot;累計販売数 850万個&quot; / &quot;リピート率 94.3%&quot; / &quot;楽天1位 獲得回数 12回&quot;. Each number should look like a flip counter display. Dark background with glowing numbers. 570x200.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/18_number_flip.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE_v2] ■ ギミック: 3つの実績数値のフリップカウンター表示</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamic)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/18_number_flip.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Statistics display for Japanese EC LP. Dark background. One number visible: '850万個' with flip counter style. Label '累計販売数'. 570x200.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Two numbers: '850万個' and '94.3%'. Labels: '累計販売数' and 'リピート率'. Glowing digits. 570x200.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">Three statistics: '850万個 累計販売数' / '94.3% リピート率' / '12回 楽天1位'. All glowing on dark background. Maximum impact. 570x200.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/18_number_flip.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG glow pulse on number boxes</div>
+  <pre class="prompt-text">pattern_b/18_number_flip.pngベース。3つのrect(30,100/205,100/380,100 w=160 h=80)にnumGlowキーフレーム(opacity 0→0.3→0)を各色(ピンク/緑/オレンジ)で2秒サイクル時間差パルス。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g19">
+  <h2><span class="gid">19</span> 限定個数 <span class="gtag">希少性</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/19_limited_stock.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a limited stock alert for Japanese EC LP. Shows &quot;残りわずか！&quot; (Almost sold out!) with a stock meter/progress bar showing ~15% remaining in red. Text: &quot;在庫 残り 23個&quot; with warning icon. Urgent red/orange color scheme. 570x180.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/19_limited_stock.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE_v2] ■ ギミック: 残りわずか在庫アラート（プログレスバー+残数）</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamic)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/19_limited_stock.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Stock alert for Japanese EC LP. Progress bar showing 50% remaining in yellow. Text '在庫状況'. Calm feel. 570x180.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">Progress bar at 25% remaining, now orange. '残りわずか！' warning text appearing. 570x180.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">Progress bar at 15% remaining, red/urgent. '残り 23個！' with warning icon. 'お急ぎください！' Highly urgent. 570x180.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/19_limited_stock.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG progress bar pulse + urgent text</div>
+  <pre class="prompt-text">pattern_b/19_limited_stock.pngベース。rect(100,200 w=370 h=16)のstroke(#e53935)をopacity 0.3→1→0.3の1.5秒パルス。text「残りわずか！」をopacity 0.5→1→0.5の1秒パルスで緊急感演出。</pre>
+</div></div>
+  </details>
+</div></div>
+</section><section class="gimmick-section" id="g20">
+  <h2><span class="gid">20</span> 送料無料+特典 <span class="gtag">オファー強化</span></h2>
+  <div class="methods-grid"><div class="method-card a">
+  <div class="method-header" style="border-color:#4fc3f7">
+    <span class="method-label" style="color:#4fc3f7">A: CSS/SVG</span>
+    <span class="method-meta">¥0 / Opus 4.6 (直接コード生成)</span>
+  </div>
+  <div class="asset-area"><div class="placeholder">01のみ実装</div></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>N/A</b> </div>
+  <div class="step-action">Not implemented</div>
+  <pre class="prompt-text">N/A</pre>
+</div></div>
+  </details>
+</div><div class="method-card b best">
+  <div class="method-header" style="border-color:#66bb6a">
+    <span class="method-label" style="color:#66bb6a">B: Gemini直接 🏆 🏆</span>
+    <span class="method-meta">~¥2/枚 / gemini-3-pro-image-preview</span>
+  </div>
+  <div class="asset-area"><img src="pattern_b/20_free_shipping.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Direct image generation</div>
+  <pre class="prompt-text">Create a free shipping + bonus visual for Japanese EC LP. Shows &quot;送料無料&quot; badge, plus bonus items: &quot;特典1: シートマスク3枚&quot; &quot;特典2: ミニサイズ美容液&quot; &quot;特典3: オリジナルポーチ&quot; arranged with gift icons. Cheerful pink/gold design. 570x300.</pre>
+</div></div>
+  </details>
+</div><div class="method-card c">
+  <div class="method-header" style="border-color:#ffa726">
+    <span class="method-label" style="color:#ffa726">C: 3.1Pro→Image</span>
+    <span class="method-meta">~¥2.4/枚 / gemini-3.1-pro → gemini-3-pro-image</span>
+  </div>
+  <div class="asset-area"><img src="pattern_c/20_free_shipping.png" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (2ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini 3.1 Pro (Director)</b> <span class="model-badge">gemini-3.1-pro-preview</span></div>
+  <div class="step-action">Creative direction</div>
+  <pre class="prompt-text">[TEMPLATE_v2] ■ ギミック: 送料無料+3大特典のギフトビジュアル</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Gemini 3.1 Pro→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Image generation</div>
+  <pre class="prompt-text">(Dynamic)</pre>
+</div></div>
+  </details>
+</div><div class="method-card d">
+  <div class="method-header" style="border-color:#ab47bc">
+    <span class="method-label" style="color:#ab47bc">D: GIF</span>
+    <span class="method-meta">~¥7/本 / gemini-3-pro-image-preview (3-4frames)</span>
+  </div>
+  <div class="asset-area"><img src="pattern_d/20_free_shipping.gif" loading="lazy" onerror="this.parentElement.innerHTML='<div class=placeholder>未生成</div>'"></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (3ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 1/3</div>
+  <pre class="prompt-text">Simple '送料無料' badge on white background. One bonus item shown. Japanese EC LP style. 570x300.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 2: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 2/3</div>
+  <pre class="prompt-text">'送料無料' badge plus 2 bonus items: シートマスク and ミニ美容液. Gift icons. Pink/gold design. 570x300.</pre>
+</div>
+<div class="prompt-step">
+  <div class="step-header">Step 3: <b>Opus→Gemini Image</b> <span class="model-badge">gemini-3-pro-image-preview</span></div>
+  <div class="step-action">Frame 3/3</div>
+  <pre class="prompt-text">Complete bonus package. '送料無料' badge + 3 bonuses: シートマスク3枚, ミニサイズ美容液, オリジナルポーチ. Gift ribbon decoration. Cheerful celebration feel. 570x300.</pre>
+</div></div>
+  </details>
+</div><div class="method-card e">
+  <div class="method-header" style="border-color:#ef5350">
+    <span class="method-label" style="color:#ef5350">E: ハイブリッド</span>
+    <span class="method-meta">¥0* / Opus 4.6 CSS + B画像</span>
+  </div>
+  <div class="asset-area"><iframe src="pattern_e/20_free_shipping.html" loading="lazy"></iframe></div>
+  <details class="prompt-details">
+    <summary>📝 プロンプト (1ステップ)</summary>
+    <div class="prompt-content"><div class="prompt-step">
+  <div class="step-header">Step 1: <b>Opus 4.6</b> </div>
+  <div class="step-action">Hybrid: B image + SVG sparkle confetti</div>
+  <pre class="prompt-text">pattern_b/20_free_shipping.pngベース。6つのSVG circle（金/ピンク/水色/緑/オレンジ/紫）をsp5キーフレーム(r:0→5→0 opacity 0→0.8→0)で2秒サイクル時間差配置。6隅に散りばめてお祝い感演出。</pre>
+</div></div>
+  </details>
+</div></div>
+</section>
+
+<div class="footer">
+  <p>AIパク / Studio PAK — ギミック素材 完全比較 v3.0 with Prompts</p>
+  <p style="margin-top:4px">LP Vector DB: 24 LP / 600エントリ / 54 gimmick分析済み</p>
+</div>
+
+</div>
+
+<script>
+// Simple password gate (SHA-256 hash)
+const HASH = "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"; // "password" — 本番で変更
+
+async function sha256(msg) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function checkAuth() {
+  const pass = document.getElementById('authPass').value;
+  const hash = await sha256(pass);
+  if (hash === HASH) {
+    document.getElementById('authGate').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    sessionStorage.setItem('gimmick_auth', '1');
+  } else {
+    document.getElementById('authError').style.display = 'block';
+    document.getElementById('authPass').value = '';
+  }
+}
+
+// Auto-login if already authenticated in this session
+if (sessionStorage.getItem('gimmick_auth') === '1') {
+  document.getElementById('authGate').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'block';
+}
+</script>
+</body>
+</html>

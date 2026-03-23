@@ -1,0 +1,21 @@
+<!-- E-03: ハイブリッド ビフォーアフター -->
+<div id="e03" style="width:570px;height:355px;position:relative;overflow:hidden;border-radius:12px;background:#fff;margin:0 auto;cursor:ew-resize;">
+  <img src="../pattern_b/03_before_after.png" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;z-index:1;">
+  <!-- スライダーライン -->
+  <div id="e03slider" style="position:absolute;top:0;left:50%;width:3px;height:100%;background:#fff;z-index:10;transform:translateX(-50%);box-shadow:0 0 8px rgba(0,0,0,0.3);">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;background:#fff;border-radius:50%;box-shadow:0 2px 10px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-size:10px;color:#666;letter-spacing:2px;">◀ ▶</div>
+  </div>
+  <!-- 右半分を隠すオーバーレイ（スライダーで制御） -->
+  <div id="e03overlay" style="position:absolute;top:0;right:0;width:50%;height:100%;background:rgba(200,180,170,0.85);z-index:5;backdrop-filter:blur(3px);">
+    <div style="position:absolute;inset:0;background-image:radial-gradient(circle 2px,rgba(0,0,0,0.12) 1px,transparent 1px);background-size:14px 14px;"></div>
+    <span style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.5);color:#fff;padding:4px 14px;border-radius:6px;font-size:13px;font-weight:bold;">Before</span>
+  </div>
+  <span style="position:absolute;top:12px;left:12px;background:#e74c6f;color:#fff;padding:4px 14px;border-radius:6px;font-size:13px;font-weight:bold;z-index:3;">After</span>
+  <!-- 自動スライドアニメ -->
+  <style>
+    @keyframes autoSlide { 0%,100%{left:50%} 30%{left:20%} 70%{left:80%} }
+    #e03slider { animation: autoSlide 5s ease-in-out infinite; }
+    @keyframes autoOverlay { 0%,100%{width:50%} 30%{width:80%} 70%{width:20%} }
+    #e03overlay { animation: autoOverlay 5s ease-in-out infinite; }
+  </style>
+</div>

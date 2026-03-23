@@ -1,0 +1,29 @@
+<!-- E-02: ハイブリッド 浸透比較 -->
+<div style="width:570px;height:355px;position:relative;overflow:hidden;border-radius:12px;background:#fff;margin:0 auto;">
+  <img src="../pattern_b/02_penetration.png" style="width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;">
+  <svg viewBox="0 0 570 355" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;">
+    <!-- 左: 弱い浸透 -->
+    <circle cx="145" r="8" fill="rgba(150,150,150,0.6)">
+      <animate attributeName="cy" values="80;160;80" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.8;0.2;0.8" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <!-- 右: 深い浸透 -->
+    <circle cx="420" r="8" fill="rgba(231,76,111,0.8)">
+      <animate attributeName="cy" values="80;300;80" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="420" r="20" fill="none" stroke="#e74c6f" stroke-width="2" opacity="0.4">
+      <animate attributeName="cy" values="80;300;80" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="10;30;10" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="390" r="6" fill="rgba(231,76,111,0.6)">
+      <animate attributeName="cy" values="90;290;90" dur="3s" begin="0.4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;0.1;0.7" dur="3s" begin="0.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="450" r="6" fill="rgba(231,76,111,0.6)">
+      <animate attributeName="cy" values="85;295;85" dur="3s" begin="0.8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;0.1;0.7" dur="3s" begin="0.8s" repeatCount="indefinite"/>
+    </circle>
+  </svg>
+</div>

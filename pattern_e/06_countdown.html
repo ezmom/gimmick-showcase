@@ -1,0 +1,13 @@
+<!-- E-06_countdown: Hybrid (Gemini image + CSS animation) -->
+<div style="width:570px;height:355px;position:relative;overflow:hidden;border-radius:12px;background:#fff;margin:0 auto;">
+  <img src="../pattern_b/06_countdown.png" style="width:100%;height:100%;object-fit:contain;position:absolute;inset:0;">
+  <svg viewBox="0 0 570 355" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;">
+    <rect x="160" y="140" width="250" height="60" rx="8" fill="rgba(0,0,0,0.7)">
+      <animate attributeName="opacity" values="0.7;0.9;0.7" dur="1s" repeatCount="indefinite"/>
+    </rect>
+    <text x="285" y="180" text-anchor="middle" fill="#ff4444" font-size="32" font-weight="bold" font-family="monospace">
+      <animate attributeName="fill" values="#ff4444;#ff8800;#ff4444" dur="1s" repeatCount="indefinite"/>
+      02:34:56
+    </text>
+  </svg>
+</div>

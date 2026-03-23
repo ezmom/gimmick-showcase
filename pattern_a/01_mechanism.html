@@ -1,0 +1,75 @@
+<!-- A-01: メカニズム開閉ギミック（セマンティック検索参照: on:myskin img_017） -->
+<div style="width:570px;height:355px;background:#fff;border-radius:12px;overflow:hidden;font-family:'Hiragino Kaku Gothic ProN',sans-serif;position:relative;margin:0 auto;">
+  <!-- ヘッダー -->
+  <div style="display:flex;justify-content:space-around;padding:12px 20px 0;">
+    <div style="background:#4fc3f7;color:#fff;padding:6px 18px;border-radius:20px;font-size:14px;font-weight:bold;">きちんとケアされた肌</div>
+    <div style="background:#ff7043;color:#fff;padding:6px 18px;border-radius:20px;font-size:14px;font-weight:bold;">角質肥厚の肌</div>
+  </div>
+  <svg viewBox="0 0 570 290" style="width:100%;margin-top:4px;">
+    <!-- 左側: ケアされた肌 -->
+    <g transform="translate(30,10)">
+      <!-- 角質層ラベル -->
+      <text x="10" y="25" fill="#666" font-size="11" transform="rotate(-90,10,80)">角質層</text>
+      <!-- 肌レイヤー -->
+      <rect x="30" y="20" width="220" height="45" rx="4" fill="#fde2c8" opacity="0.6"/>
+      <rect x="30" y="70" width="220" height="45" rx="4" fill="#f5c6a0" opacity="0.7"/>
+      <rect x="30" y="120" width="220" height="45" rx="4" fill="#e8a882" opacity="0.7"/>
+      <rect x="30" y="170" width="220" height="45" rx="4" fill="#d4886a" opacity="0.6"/>
+      <!-- 角質ブロック（小さい = 正常） -->
+      <rect x="40" y="30" width="30" height="25" rx="4" fill="#e8c9a8" stroke="#d4a882" stroke-width="1"/>
+      <rect x="80" y="30" width="30" height="25" rx="4" fill="#e8c9a8" stroke="#d4a882" stroke-width="1"/>
+      <rect x="120" y="30" width="30" height="25" rx="4" fill="#e8c9a8" stroke="#d4a882" stroke-width="1"/>
+      <rect x="160" y="30" width="30" height="25" rx="4" fill="#e8c9a8" stroke="#d4a882" stroke-width="1"/>
+      <rect x="200" y="30" width="30" height="25" rx="4" fill="#e8c9a8" stroke="#d4a882" stroke-width="1"/>
+      <!-- 浸透矢印（アニメ） -->
+      <g>
+        <circle cx="70" cy="50" r="6" fill="#4fc3f7" opacity="0.8">
+          <animate attributeName="cy" values="25;180;25" dur="3s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="140" cy="50" r="6" fill="#4fc3f7" opacity="0.8">
+          <animate attributeName="cy" values="25;180;25" dur="3s" begin="0.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;0.3;1" dur="3s" begin="0.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="210" cy="50" r="6" fill="#4fc3f7" opacity="0.8">
+          <animate attributeName="cy" values="25;180;25" dur="3s" begin="1s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;0.3;1" dur="3s" begin="1s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      <text x="100" y="240" text-anchor="middle" fill="#4fc3f7" font-size="13" font-weight="bold">美容成分が浸透 ※</text>
+    </g>
+    <!-- 右側: 角質肥厚 -->
+    <g transform="translate(300,10)">
+      <text x="10" y="25" fill="#666" font-size="11" transform="rotate(-90,10,80)">角質層</text>
+      <!-- 厚い角質層 -->
+      <rect x="30" y="20" width="220" height="70" rx="4" fill="#c8b8a8" opacity="0.8"/>
+      <rect x="30" y="95" width="220" height="35" rx="4" fill="#f5c6a0" opacity="0.5"/>
+      <rect x="30" y="135" width="220" height="35" rx="4" fill="#e8a882" opacity="0.5"/>
+      <rect x="30" y="175" width="220" height="35" rx="4" fill="#d4886a" opacity="0.4"/>
+      <!-- 大きい角質ブロック（肥厚） -->
+      <rect x="35" y="22" width="45" height="30" rx="3" fill="#b0a090" stroke="#998070" stroke-width="1.5"/>
+      <rect x="85" y="25" width="40" height="28" rx="3" fill="#a89888" stroke="#998070" stroke-width="1.5"/>
+      <rect x="130" y="22" width="50" height="32" rx="3" fill="#b0a090" stroke="#998070" stroke-width="1.5"/>
+      <rect x="185" y="25" width="45" height="28" rx="3" fill="#a89888" stroke="#998070" stroke-width="1.5"/>
+      <rect x="50" y="55" width="42" height="25" rx="3" fill="#b8a898" stroke="#998070" stroke-width="1"/>
+      <rect x="100" y="55" width="48" height="28" rx="3" fill="#a89080" stroke="#998070" stroke-width="1"/>
+      <rect x="155" y="55" width="42" height="25" rx="3" fill="#b0a090" stroke="#998070" stroke-width="1"/>
+      <!-- 浸透できない矢印 -->
+      <g>
+        <circle cx="100" cy="15" r="6" fill="#ff7043" opacity="0.8">
+          <animate attributeName="cy" values="10;40;10" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="170" cy="15" r="6" fill="#ff7043" opacity="0.8">
+          <animate attributeName="cy" values="10;35;10" dur="2s" begin="0.3s" repeatCount="indefinite"/>
+        </circle>
+        <!-- ×マーク -->
+        <text x="140" y="100" text-anchor="middle" fill="#e53935" font-size="28" font-weight="bold" opacity="0.8">✕</text>
+      </g>
+      <text x="110" y="240" text-anchor="middle" fill="#e53935" font-size="13" font-weight="bold">浸透しない</text>
+    </g>
+    <!-- 中央仕切り -->
+    <line x1="285" y1="10" x2="285" y2="260" stroke="#ddd" stroke-width="2" stroke-dasharray="6,4"/>
+    <!-- 注釈 -->
+    <text x="540" y="270" text-anchor="end" fill="#999" font-size="9">※角質層まで</text>
+  </svg>
+</div>
