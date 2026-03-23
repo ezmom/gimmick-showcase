@@ -2023,83 +2023,129 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const veoHTML = `
-<div id="veoABC" style="max-width:1400px;margin:20px auto;padding:20px 12px;border-top:3px solid #ffa726">
-  <h2 style="font-size:18px;text-align:center;margin-bottom:8px">🎬 Veo 2.0 ABC仮説テスト — 01_mechanism</h2>
+  // Remove old veo section if exists
+  const oldVeo = document.getElementById('veoABC');
+  if (oldVeo) oldVeo.remove();
+  
+  const fullVeoHTML = `
+<div id="veoABCFull" style="max-width:1400px;margin:20px auto;padding:20px 12px;border-top:3px solid #ffa726">
+  <h2 style="font-size:18px;text-align:center;margin-bottom:8px">🎬 Veo ABC仮説 × 3モデル 完全マトリクス — 01_mechanism</h2>
   <p style="text-align:center;color:#666;font-size:12px;margin-bottom:6px">
-    B画像（Gemini直接）を入力 → Veo 2.0で動画化 → GIF変換 | 各¥262（$1.75）× 3本 = ¥786
+    B画像 → Veo動画化 → GIF変換 | 全9本生成完了
   </p>
   <p style="text-align:center;color:#555;font-size:11px;margin-bottom:20px">
-    ※ Veo 3.0 fast / 3.1 fast はduration制約で今回不可。Veo 2.0のみの結果。
+    Veo 2.0: ¥262/本(5秒×$0.35) | Veo 3.0 fast: ¥135/本(6秒×$0.15) | Veo 3.1 fast: ¥135/本(6秒×$0.15) | 合計: ¥1,596
   </p>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:16px">
-    <div style="border:2px solid #66bb6a;border-radius:10px;overflow:hidden">
-      <div style="padding:6px 10px;font-size:11px;background:rgba(102,187,106,0.1);color:#66bb6a;font-weight:bold;text-align:center">
-        B: 元画像（静止画）
-      </div>
-      <div style="background:#fff;padding:4px"><img src="pattern_b/01_mechanism.png" style="width:100%;display:block;border-radius:4px"></div>
-      <div style="padding:6px 10px;font-size:10px;color:#888;text-align:center">比較用ベースライン</div>
+  <!-- Header row -->
+  <div style="display:grid;grid-template-columns:120px 1fr 1fr 1fr;gap:8px;margin-bottom:6px">
+    <div></div>
+    <div style="text-align:center;padding:6px;border-radius:8px;background:rgba(79,195,247,0.08)">
+      <b style="color:#4fc3f7;font-size:12px">A: 微動（Subtle）</b><br>
+      <span style="color:#666;font-size:9px">静止画に見えるけど動く</span>
     </div>
-    
-    <div style="border:1px solid rgba(79,195,247,0.4);border-radius:10px;overflow:hidden">
-      <div style="padding:6px 10px;font-size:11px;background:rgba(79,195,247,0.1);color:#4fc3f7;font-weight:bold;text-align:center">
-        仮説A: 微動（Subtle）
-      </div>
-      <div style="background:#fff;padding:4px"><img src="veo_abc/A_subtle_veo2.gif" style="width:100%;display:block;border-radius:4px"></div>
-      <div style="padding:6px 10px;font-size:10px;color:#888">レイアウト固定。粒子だけ微かに動く。高級感。</div>
+    <div style="text-align:center;padding:6px;border-radius:8px;background:rgba(171,71,188,0.08)">
+      <b style="color:#ab47bc;font-size:12px">B: 説明アニメ</b><br>
+      <span style="color:#666;font-size:9px">仕組みを順番に見せる</span>
     </div>
-    
-    <div style="border:1px solid rgba(171,71,188,0.4);border-radius:10px;overflow:hidden">
-      <div style="padding:6px 10px;font-size:11px;background:rgba(171,71,188,0.1);color:#ab47bc;font-weight:bold;text-align:center">
-        仮説B: 説明アニメ（Explain）
-      </div>
-      <div style="background:#fff;padding:4px"><img src="veo_abc/B_explain_veo2.gif" style="width:100%;display:block;border-radius:4px"></div>
-      <div style="padding:6px 10px;font-size:10px;color:#888">メカニズムを動きで説明。教育的。</div>
-    </div>
-    
-    <div style="border:1px solid rgba(239,83,80,0.4);border-radius:10px;overflow:hidden">
-      <div style="padding:6px 10px;font-size:11px;background:rgba(239,83,80,0.1);color:#ef5350;font-weight:bold;text-align:center">
-        仮説C: インパクト（Dramatic）
-      </div>
-      <div style="background:#fff;padding:4px"><img src="veo_abc/C_impact_veo2.gif" style="width:100%;display:block;border-radius:4px"></div>
-      <div style="padding:6px 10px;font-size:10px;color:#888">ズーム+光+パーティクル。感情を動かす。</div>
+    <div style="text-align:center;padding:6px;border-radius:8px;background:rgba(239,83,80,0.08)">
+      <b style="color:#ef5350;font-size:12px">C: インパクト</b><br>
+      <span style="color:#666;font-size:9px">ドラマチック演出</span>
     </div>
   </div>
 
-  <div style="text-align:center;padding:8px;border:1px solid rgba(255,255,255,0.06);border-radius:8px;background:rgba(255,255,255,0.02)">
+  <!-- Veo 2.0 row -->
+  <div style="display:grid;grid-template-columns:120px 1fr 1fr 1fr;gap:8px;margin-bottom:8px">
+    <div style="display:flex;align-items:center;justify-content:center;padding:8px;border-radius:8px;background:rgba(255,167,38,0.08)">
+      <div style="text-align:center">
+        <b style="color:#ffa726;font-size:11px">Veo 2.0</b><br>
+        <span style="color:#888;font-size:9px">¥262/本</span><br>
+        <span style="color:#888;font-size:8px">5秒 / $0.35/s</span>
+      </div>
+    </div>
+    <div style="border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;background:#fff">
+      <img src="veo_abc/A_subtle_veo2.gif" style="width:100%;display:block">
+    </div>
+    <div style="border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;background:#fff">
+      <img src="veo_abc/B_explain_veo2.gif" style="width:100%;display:block">
+    </div>
+    <div style="border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;background:#fff">
+      <img src="veo_abc/C_impact_veo2.gif" style="width:100%;display:block">
+    </div>
+  </div>
+
+  <!-- Veo 3.0 fast row -->
+  <div style="display:grid;grid-template-columns:120px 1fr 1fr 1fr;gap:8px;margin-bottom:8px">
+    <div style="display:flex;align-items:center;justify-content:center;padding:8px;border-radius:8px;background:rgba(102,187,106,0.08)">
+      <div style="text-align:center">
+        <b style="color:#66bb6a;font-size:11px">Veo 3.0 fast</b><br>
+        <span style="color:#888;font-size:9px">¥135/本</span><br>
+        <span style="color:#888;font-size:8px">6秒 / $0.15/s</span>
+      </div>
+    </div>
+    <div style="border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;background:#fff">
+      <img src="veo_abc/A_subtle_veo3fast.gif" style="width:100%;display:block">
+    </div>
+    <div style="border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;background:#fff">
+      <img src="veo_abc/B_explain_veo3fast.gif" style="width:100%;display:block">
+    </div>
+    <div style="border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;background:#fff">
+      <img src="veo_abc/C_impact_veo3fast.gif" style="width:100%;display:block">
+    </div>
+  </div>
+
+  <!-- Veo 3.1 fast row -->
+  <div style="display:grid;grid-template-columns:120px 1fr 1fr 1fr;gap:8px;margin-bottom:16px">
+    <div style="display:flex;align-items:center;justify-content:center;padding:8px;border-radius:8px;background:rgba(231,76,111,0.08)">
+      <div style="text-align:center">
+        <b style="color:#e74c6f;font-size:11px">Veo 3.1 fast</b><br>
+        <span style="color:#888;font-size:9px">¥135/本</span><br>
+        <span style="color:#888;font-size:8px">6秒 / $0.15/s</span>
+      </div>
+    </div>
+    <div style="border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;background:#fff">
+      <img src="veo_abc/A_subtle_veo31fast.gif" style="width:100%;display:block">
+    </div>
+    <div style="border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;background:#fff">
+      <img src="veo_abc/B_explain_veo31fast.gif" style="width:100%;display:block">
+    </div>
+    <div style="border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;background:#fff">
+      <img src="veo_abc/C_impact_veo31fast.gif" style="width:100%;display:block">
+    </div>
+  </div>
+
+  <!-- B元画像 reference -->
+  <div style="text-align:center;margin-bottom:16px">
+    <details style="display:inline-block;border:1px solid rgba(255,255,255,0.06);border-radius:8px">
+      <summary style="padding:6px 16px;font-size:11px;cursor:pointer;color:#888">🖼 B元画像（入力に使用した静止画）を表示</summary>
+      <div style="background:#fff;padding:8px;max-width:400px"><img src="pattern_b/01_mechanism.png" style="width:100%;display:block;border-radius:4px"></div>
+    </details>
+  </div>
+
+  <!-- Cost summary -->
+  <div style="text-align:center;padding:10px;border:1px solid rgba(255,255,255,0.06);border-radius:8px;background:rgba(255,255,255,0.02)">
+    <p style="font-size:12px;color:#aaa;margin-bottom:4px"><b>コスト比較</b></p>
     <p style="font-size:11px;color:#888">
-      <b>プロンプトの違い:</b> 同じB画像入力で、動かし方の指示だけ変えている。<br>
-      A=「ほぼ静止、微かな動き」/ B=「仕組みを順番に見せる」/ C=「ドラマチック演出」
+      Veo 2.0: 3本×¥262 = <b>¥786</b> |
+      Veo 3.0 fast: 3本×¥135 = <b>¥405</b> |
+      Veo 3.1 fast: 3本×¥135 = <b>¥405</b> |
+      <span style="color:#e74c6f">合計: <b>¥1,596</b></span>
+    </p>
+    <p style="font-size:10px;color:#555;margin-top:4px">
+      ※ 量産時は1ギミック1本で済むので ¥135〜262/ギミック。20種全部で ¥2,700〜5,240
     </p>
   </div>
-
-  <details style="margin-top:12px;border:1px solid rgba(255,255,255,0.06);border-radius:8px;overflow:hidden">
-    <summary style="padding:8px 12px;font-size:11px;cursor:pointer;color:#888">📝 全プロンプト表示</summary>
-    <div style="padding:12px;font-size:10px">
-      <div style="margin-bottom:12px">
-        <b style="color:#4fc3f7">仮説A（微動）:</b>
-        <pre style="background:rgba(0,0,0,0.3);padding:8px;border-radius:4px;white-space:pre-wrap;color:#ccc;margin-top:4px;font-family:monospace">Subtle, minimal motion on this skincare infographic. Keep the exact layout and text perfectly still. Only animate: tiny particles slowly drifting downward along the arrow paths, a very gentle pulse/breathing effect on the skin layers, and a soft shimmer of light moving across the surface. The motion should be almost imperceptible — like a high-end luxury brand animation. 5 seconds, seamless loop feeling.</pre>
-      </div>
-      <div style="margin-bottom:12px">
-        <b style="color:#ab47bc">仮説B（説明アニメ）:</b>
-        <pre style="background:rgba(0,0,0,0.3);padding:8px;border-radius:4px;white-space:pre-wrap;color:#ccc;margin-top:4px;font-family:monospace">Animate this skincare infographic to explain the mechanism step by step. First, show the LEFT side: the pore muscle relaxes and the pore opens wide, with red muscle fibers stretching apart. Then transition focus to the RIGHT side: the pore muscle contracts and tightens, closing the pore. Blue particles flow downward through the skin layers on the right side, showing successful penetration. Educational animation that makes the viewer understand the mechanism just by watching. 5 seconds.</pre>
-      </div>
-      <div>
-        <b style="color:#ef5350">仮説C（インパクト）:</b>
-        <pre style="background:rgba(0,0,0,0.3);padding:8px;border-radius:4px;white-space:pre-wrap;color:#ccc;margin-top:4px;font-family:monospace">Dramatic, cinematic animation of this skincare infographic. Camera slowly zooms into the skin cross-section. Intense glowing particles burst through the skin layers with light trail effects. The pore contraction on the right side happens with a satisfying snap effect and a brief flash of light. Energy waves ripple through the skin layers. The whole animation builds to a climactic moment of transformation. Impactful, emotional, makes the viewer feel the power of the product. 5 seconds.</pre>
-      </div>
-    </div>
-  </details>
 </div>`;
   
   const motionTest = document.getElementById('motionTest');
-  if (motionTest) motionTest.insertAdjacentHTML('afterend', veoHTML);
+  if (motionTest) motionTest.insertAdjacentHTML('afterend', fullVeoHTML);
   else {
     const footer = document.querySelector('.footer');
-    if (footer) footer.insertAdjacentHTML('beforebegin', veoHTML);
+    if (footer) footer.insertAdjacentHTML('beforebegin', fullVeoHTML);
   }
 });
 </script>
